@@ -14,7 +14,7 @@ namespace LCDMessageBoxController
         /// </summary>
         static void Main(string[] args)
         {
-            if (!Properties.Settings.Default.RunAsService || (args.Length > 0 && args[0] == "nonservice"))
+            if (Environment.UserInteractive)
             {
                 LCDMessageBoxController controller = new LCDMessageBoxController();
                 controller.Start();
