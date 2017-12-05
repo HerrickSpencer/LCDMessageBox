@@ -43,21 +43,24 @@ namespace LCDMessageBoxController
 
         protected override void OnStart(string[] args)
         {
-            MoveToNextLine();
+            thisTimer = new System.Timers.Timer()
+            {
+                Enabled = true,
+                Interval = 2000,
+                AutoReset = true,
+            };
+            thisTimer.Elapsed += ThisTimer_Elapsed;
+
             isLoggingVerbose = Properties.Settings.Default.LoggingVerbose;
             TRANSEIVERPORT = Properties.Settings.Default.TRANSEIVERPORT ?? "COM3";
             serialPort = new SerialPort(TRANSEIVERPORT, BAUDRATE);
-            serialPort.Open();
-            serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
-            thisTimer = new System.Timers.Timer();
-            thisTimer.Enabled = true;
-            thisTimer.Interval = 2000;
-            thisTimer.AutoReset = true;
-            thisTimer.Elapsed += new System.Timers.ElapsedEventHandler(thisTimer_Elapsed);
+            serialPort.DataReceived += SerialPort_DataReceived;
+
+
             thisTimer.Start();
         }
 
-        void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (MessageRecieved())
             {
@@ -67,7 +70,7 @@ namespace LCDMessageBoxController
             }
         }
 
-        private void thisTimer_Elapsed(object sender, EventArgs e)
+        private void ThisTimer_Elapsed(object sender, EventArgs e)
         {
             if (!ShouldRun()) { return; }
 
@@ -76,14 +79,27 @@ namespace LCDMessageBoxController
             lock (loopLock)
             {
                 isSending = true;
-                thisTimer.Stop();
 
-                incomingData = "";
-                waitingOnEcho = 10;
-                SendSerialMessage( outgoingMsg, lineNumber);
-
-                isSending = false;
-                thisTimer.Start();
+                try
+                {
+                    if (!serialPort.IsOpen)
+                    {
+                        serialPort.Open();
+                    }
+                    MoveToNextLine();
+                    incomingData = "";
+                    waitingOnEcho = 10;
+                    SendSerialMessage(outgoingMsg, lineNumber);
+                }
+                catch (System.IO.IOException)
+                {
+                    LogEvent($"Port is not ready on {TRANSEIVERPORT}", EventLogEntryType.Error);
+                }
+                finally
+                {
+                    isSending = false;
+                    thisTimer.Interval = (serialPort.IsOpen ? 2 : 120) * 1000;
+                }
             }
         }
 
@@ -151,12 +167,12 @@ namespace LCDMessageBoxController
                 if (serialPort.BytesToRead > 0)
                 {
                     incomingData += serialPort.ReadExisting();
-                    string[] incomingMsgs = incomingData.Split(new string[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries);
+                    string[] incomingMsgs = incomingData.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string incomingMsg in incomingMsgs)
                     {
                         LogEvent("Data found = " + incomingMsg);
                         int lineNbr = 0;
-                        if (incomingMsg.IndexOf(',') <= 0 )
+                        if (incomingMsg.IndexOf(',') <= 0)
                         {
                             LogEvent("No comma");
                             continue;
@@ -176,7 +192,7 @@ namespace LCDMessageBoxController
                         waitingOnEcho = 0;
                         return true;
                     }
-                    incomingData = incomingMsgs[incomingMsgs.Length-1];
+                    incomingData = incomingMsgs[incomingMsgs.Length - 1];
                 }
                 return false;
             }
@@ -212,7 +228,7 @@ namespace LCDMessageBoxController
         {
             if (this.isLoggingVerbose || type != EventLogEntryType.Information)
             {
-            EventLog.WriteEntry(message, type);
+                EventLog.WriteEntry(message, type);
             }
         }
     }
