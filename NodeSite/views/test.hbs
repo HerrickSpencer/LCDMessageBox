@@ -1,0 +1,73 @@
+<style>
+    body {
+        background-color: lightblue;
+    } 
+    td {
+        padding-top: 10px;
+        padding-left: 5px;
+    }
+    img {
+        padding-left: 20px;
+    }
+</style>
+<script>
+    function loadMessages() {
+    var file = new XMLHttpRequest();
+    file.open("GET", "http://localhost:4000/messages.txt", true);
+    file.onreadystatechange = function() {
+      if (file.readyState === 4) {  // Makes sure the document is ready to parse
+        if (file.status === 200) {  // Makes sure it's found the file
+          text = file.responseText;
+          document.getElementById("div1").innerHTML = text;
+        }
+      }
+    }
+
+    function loadmsg(){
+
+    var txtFile = new XMLHttpRequest();
+    txtFile.open("GET", "http://localhost:4000/messages.txt", true);
+    txtFile.onreadystatechange = function() {
+        if (txtFile.readyState === 4 && txtFile.status == 200) {
+            allText = txtFile.responseText;
+        }
+            document.getElementById('div1').innerHTML = allText;
+    }
+}
+</script>
+<h2>LCD CigarBox Messenger</h2>
+<p>
+    Hello! From here you can enter a 4 line message to display on the LCD Cigar box in Herrick's Office. (113/3306)
+</p>
+<p> Your message is received on this NodeJS site, then the message is sent via serial port over a USB Wixel transmitter to the box on the shelf.</p>
+<p> The cigar box is running an Arduino Uno with an identical Wixel transmitter inside to receive the message.</p>
+<table padding=2>
+<tr>
+    <td>
+        <form method="get">
+        <input id="mytext0" name="mytext0" type="text" maxlength="20"/><br/>
+        <input id="mytext1" name="mytext1" type="text" maxlength="20"/><br/>
+        <input id="mytext2" name="mytext2" type="text" maxlength="20"/><br/>
+        <input id="mytext3" name="mytext3" type="text" maxlength="20"/><br/>
+        <input type="submit" value="send"/>
+        </form>
+        After sending your message, go check it out!<br/>
+        {{Answer}}<br/><br/>
+        {{Line0}}<br/>
+        {{Line1}}<br/>
+        {{Line2}}<br/>
+        {{Line3}}<br/>    
+    </td>
+    <td>
+        Image updates every 2sec automatically... and messages take about 10sec to get to box..<br/>
+        ie: just wait.<br/>
+        <img id="WebCamImage" src="./test_picture.bmp"  />
+    </td>
+</tr>
+<tr>
+    <td style="align-content: center">
+        Previous messages:<br/>
+        <iframe src="./messages.txt" height=700/>
+    </td>
+</tr>
+</table>

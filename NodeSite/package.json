@@ -1,0 +1,20 @@
+{
+  "name": "NodeSite",
+  "version": "1.0.0",
+  "description": "This is a site to see if we can push text data to a serial port, which will display on an LCD screen remotely through Wixel transmiter.",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "node-webcam": "^0.4.3",
+    "serialport": "^6.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

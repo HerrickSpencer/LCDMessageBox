@@ -1,0 +1,1 @@
+node "E:\Visual Studio 2017\Projects\NodeSite\index.js" >> e:\temp\nodeserver.log
