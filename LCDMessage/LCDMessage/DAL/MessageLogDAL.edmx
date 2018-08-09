@@ -4,26 +4,36 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LCDMessageDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="LCDMessageDBModelStoreContainer">
-          <EntitySet Name="MessageLog" EntityType="LCDMessageDBModel.Store.MessageLog" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
-        <EntityType Name="MessageLog">
-          <Key>
-            <PropertyRef Name="messageID" />
-          </Key>
-          <Property Name="messageID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="message" Type="varchar(max)" Nullable="false" />
-          <Property Name="username" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="messageDate" Type="datetime" Nullable="false" />
-        </EntityType>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="LCDMessageDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="LCDMessageDBModelStoreContainer">
+    <EntitySet Name="MessageLogs" EntityType="LCDMessageDBModel.Store.MessageLogs" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MessageLog1" EntityType="LCDMessageDBModel.Store.MessageLog1" store:Type="Tables" Schema="dbo" />
+  </EntityContainer>
+  <EntityType Name="MessageLogs">
+    <Key>
+      <PropertyRef Name="messageID" />
+    </Key>
+    <Property Name="messageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="message" Type="varchar(max)" Nullable="false" />
+    <Property Name="username" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="messageDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MessageLog1">
+    <Key>
+      <PropertyRef Name="messageID" />
+    </Key>
+    <Property Name="messageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="message" Type="varchar(max)" Nullable="false" />
+    <Property Name="username" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="messageDate" Type="datetime" Nullable="false" />
+  </EntityType>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LCDMessageDBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="LCDMessageDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="MessageLogs" EntityType="LCDMessageDBModel.MessageLog" />
+          <EntitySet Name="MessageLog1" EntityType="LCDMessageDBModel.MessageLog1" />
         </EntityContainer>
         <EntityType Name="MessageLog">
           <Key>
@@ -34,21 +44,43 @@
           <Property Name="username" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="messageDate" Type="DateTime" Nullable="false" />
         </EntityType>
+        <EntityType Name="MessageLog1">
+          <Key>
+            <PropertyRef Name="messageID" />
+          </Key>
+          <Property Name="messageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="messageDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="LCDMessageDBModelStoreContainer" CdmEntityContainer="LCDMessageDBEntities">
-          <EntitySetMapping Name="MessageLogs"><EntityTypeMapping TypeName="LCDMessageDBModel.MessageLog"><MappingFragment StoreEntitySet="MessageLog">
-            <ScalarProperty Name="messageID" ColumnName="messageID" />
-            <ScalarProperty Name="message" ColumnName="message" />
-            <ScalarProperty Name="username" ColumnName="username" />
-            <ScalarProperty Name="messageDate" ColumnName="messageDate" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="LCDMessageDBModelStoreContainer" CdmEntityContainer="LCDMessageDBEntities">
+    <EntitySetMapping Name="MessageLogs">
+      <EntityTypeMapping TypeName="IsTypeOf(LCDMessageDBModel.MessageLog)">
+        <MappingFragment StoreEntitySet="MessageLogs">
+          <ScalarProperty Name="messageID" ColumnName="messageID" />
+          <ScalarProperty Name="message" ColumnName="message" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="messageDate" ColumnName="messageDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MessageLog1">
+      <EntityTypeMapping TypeName="IsTypeOf(LCDMessageDBModel.MessageLog1)">
+        <MappingFragment StoreEntitySet="MessageLog1">
+          <ScalarProperty Name="messageID" ColumnName="messageID" />
+          <ScalarProperty Name="message" ColumnName="message" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="messageDate" ColumnName="messageDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
@@ -62,12 +94,15 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="MessageLogDAL">
-        <EntityTypeShape EntityType="LCDMessageDBModel.MessageLog" Width="1.5" PointX="0.75" PointY="0.75" Height="1.787985026041667" IsExpanded="true" />
+        <EntityTypeShape EntityType="LCDMessageDBModel.MessageLog" Width="1.5" PointX="0.875" PointY="1.125" Height="1.787985026041667" IsExpanded="true" />
+        <EntityTypeShape EntityType="LCDMessageDBModel.MessageLog1" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

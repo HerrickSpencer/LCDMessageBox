@@ -24,7 +24,7 @@ namespace LCDMessage
             string returnMessages = string.Empty;
 
             returnMessages += "<table border=1><tr><th>User</th><th>Message</th><th>PostDate</th></tr>";
-
+            
             using (DAL.LCDMessageDBEntities db = new DAL.LCDMessageDBEntities())
             {
                 var messages = (
