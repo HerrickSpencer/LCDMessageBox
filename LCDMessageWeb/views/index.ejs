@@ -7,5 +7,12 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+
+    <form method="post" action="msgHandle">
+      <textarea name="msg" cols="40" rows="4" width="200" height="20"></textarea>
+      <input type="submit"></button>
+    </form>
+
+    <textarea><%= msg %></textarea>
   </body>
 </html>
