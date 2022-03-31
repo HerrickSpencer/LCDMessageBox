@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var messageHelper = require("../helpers/messageHelper");
 var serialport = require("serialport");
 var SerialPort = serialport.SerialPort;
 
 router.post('/msgHandle', function (req, res) {
     console.log(req.body);
+
+    var lines = messageHelper.FormatMessage(req.body.msg);
 
     // send msg to cigarbox (serial port)
     // https://cmsdk.com/node-js/how-to-write-in-serial-port-using-nodejs.html
