@@ -32,41 +32,40 @@ void setup() {
 }
 
 void serialEvent(){
-while (Serial.available()) {
-  char last = Serial.read();
-  
-  switch (last)
-  {
-    case '\x06':
-      ResetLine();
-      lnNmb = Serial.parseInt();
-      last = Serial.read();
-      if (last != ',')
-      {
-        incomingMsg+=last;
-      }
-      Serial.println("Got Ack");
-      break;
-    case '\n':
-      if (lnNmb < ROWS)
-      {
-        lines[lnNmb] = incomingMsg;
-      }
-      else
-      {
-        if (incomingMsg=="PRINTSCR")
+  while (Serial.available()) {
+    char last = Serial.read();
+    
+    switch (last)
+    {
+      case '\x06':
+        ResetLine();
+        lnNmb = Serial.parseInt();
+        last = Serial.read();
+        if (last != ',')
         {
-          PrintScreen();
+          incomingMsg+=last;
         }
-      }
-      lineComplete = true;
-      Serial.println("Got CR");
-      break;
-    default:
-      incomingMsg+=last;
-  }
-}    
-
+        Serial.println("Got Ack");
+        break;
+      case '\n':
+        if (lnNmb < ROWS)
+        {
+          lines[lnNmb] = incomingMsg;
+        }
+        else
+        {
+          if (incomingMsg=="PRINTSCR")
+          {
+            PrintScreen();
+          }
+        }
+        lineComplete = true;
+        Serial.println("Got CR");
+        break;
+      default:
+        incomingMsg+=last;
+    }
+  }    
 }
 
 void PrintScreen()
@@ -113,5 +112,3 @@ void loop() {
     ResetLine();
   }
 }
-
-
